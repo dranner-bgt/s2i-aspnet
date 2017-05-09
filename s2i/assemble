@@ -19,7 +19,8 @@ if [[ "$1" == "-h" ]]; then
 fi
 
 # Go to sub project
-if [ -n "$DOTNET_SUB_PROJECT"]; then
+if [ -n "$DOTNET_SUB_PROJECT" ]; then
+	echo "---> using sub-project ${DOTNET_SUB_PROJECT}"
 	cd $DOTNET_SUB_PROJECT
 fi
 
