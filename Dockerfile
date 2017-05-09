@@ -24,6 +24,12 @@ RUN yum install -y libunwind libicu && \
     ln -s /dotnet/dotnet /usr/local/bin && \
     rm -rf /tmp/dotnet.tar.gz
 
+# Warm-up dotnet package cache
+RUN mkdir -p warmup && \
+    cd warmup && \
+    dotnet new && \
+    cd .. && \
+    rm -rf warmup
 
 EXPOSE 8080/tcp
 
