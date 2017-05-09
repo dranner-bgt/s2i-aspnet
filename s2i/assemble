@@ -18,15 +18,9 @@ if [[ "$1" == "-h" ]]; then
 	exec /usr/libexec/s2i/usage
 fi
 
-echo "---> current working directory"
-pwd
-echo "---> HOME"
-echo ${HOME}
-
-echo "---> Copying application source ..."
-ls -a ${HOME}
-ls -a /tmp/src
-cp -Rf /tmp/src/. ./
+if [ -n "$DOTNET_SUB_PROJECT"]
+	cd $DOTNET_SUB_PROJECT
+fi
 
 # output assembly name
 if [ -n "$DOTNET_ASSEMBLY_NAME" ]; then
