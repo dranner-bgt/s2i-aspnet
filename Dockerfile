@@ -1,14 +1,14 @@
 FROM openshift/base-centos7
 
-MAINTAINER Andrew Block <andy.block@gmail.com>
+MAINTAINER Daniel Ranner <daniel.ranner@best-gaming.com>
 
 ENV \ 
-    DOTNET_CORE_VERSION=1.0 \
+    DOTNET_CORE_VERSION=1.1 \
     HOME=/opt/app-root/src
 
 # Set the labels that are used for Openshift to describe the builder image.
-LABEL io.k8s.description="ASP.NET Core 1.0" \
-    io.k8s.display-name="ASP.NET Core 1.0" \
+LABEL io.k8s.description="ASP.NET Core 1.1" \
+    io.k8s.display-name="ASP.NET Core 1.1" \
     io.openshift.expose-services="8080:http" \
     io.openshift.tags="builder,webserver,html,aspdotnet" \
     io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
@@ -19,7 +19,7 @@ RUN yum install -y libunwind libicu && \
     mkdir -p ${HOME} && \
     chown -R 1001:0 ${HOME}/ && \
     chown -R 1001:0 /opt/app-root && \
-    curl -sSL -o /tmp/dotnet.tar.gz https://go.microsoft.com/fwlink/?LinkID=809131 && \
+    curl -sSL -o /tmp/dotnet.tar.gz https://go.microsoft.com/fwlink/?linkid=847103 && \
     mkdir -p /dotnet/ && tar zxf /tmp/dotnet.tar.gz -C /dotnet && \
     ln -s /dotnet/dotnet /usr/local/bin && \
     rm -rf /tmp/dotnet.tar.gz
