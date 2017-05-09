@@ -25,6 +25,8 @@ if [ -n "$DOTNET_ASSEMBLY_NAME" ]; then
 fi
 
 echo "---> Copying application source ..."
+ls -a ${HOME}
+ls -a /tmp/src
 cp -Rf /tmp/src/. ./
 
 # output assembly name
