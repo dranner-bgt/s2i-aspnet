@@ -7,26 +7,39 @@
 #	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
 #
 
+set -e
+
+DOTNET_CONFIGURATION="${DOTNET_CONFIGURATION:-Release}"
+DOTNET_STARTUP_PROJECT="${DOTNET_STARTUP_PROJECT:-.}"
+
 if [[ "$1" == "-h" ]]; then
 	# If the 'aspnet' assemble script is executed with '-h' flag,
 	# print the usage.
 	exec /usr/libexec/s2i/usage
 fi
 
-# Restore artifacts from the previous build (if they exist).
-# We set them here just for show, but you will need to set this up with your logic
-# according to the application directory that you chose.
-if [ "$(ls /tmp/artifacts/ 2>/dev/null)" ]; then
-  echo "---> Restoring build artifacts..."
-  mv /tmp/artifacts/* ${HOME}/
+# project.json defaults to naming the assembly the same as the folder
+if [ -n "$DOTNET_ASSEMBLY_NAME" ]; then
+  mkdir "$DOTNET_ASSEMBLY_NAME"
+  cd "$DOTNET_ASSEMBLY_NAME"
 fi
 
-echo "---> Building and installing application from source..."
+echo "---> Copying application source ..."
+cp -Rf /tmp/src/. ./
 
-cd ${HOME}
+# output assembly name
+if [ -n "$DOTNET_ASSEMBLY_NAME" ]; then
+  APP_DLL_NAME="${DOTNET_ASSEMBLY_NAME}.dll"
+else
+  APP_DLL_NAME="$(basename "$(realpath "${DOTNET_STARTUP_PROJECT}")").dll"
+fi
 
-dotnet restore
-dotnet build
+echo "---> Installing dependencies ..."
+dotnet restore $RESTORE_OPTIONS
+
+# build application
+echo "---> Building application ..."
+dotnet build -f "$DOTNET_FRAMEWORK" -c "$DOTNET_CONFIGURATION" "$DOTNET_STARTUP_PROJECT"
 
 # Fix source directory permissions
 fix-permissions ./
