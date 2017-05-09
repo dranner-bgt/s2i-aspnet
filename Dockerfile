@@ -24,6 +24,8 @@ RUN yum install -y libunwind libicu && \
     ln -s /dotnet/dotnet /usr/local/bin && \
     rm -rf /tmp/dotnet.tar.gz
 
+USER 1001
+
 # Warm-up dotnet package cache
 RUN mkdir -p warmup && \
     cd warmup && \
@@ -35,7 +37,6 @@ EXPOSE 8080/tcp
 
 COPY  ["s2i/run", "s2i/assemble", "s2i/save-artifacts", "s2i/usage", "/usr/libexec/s2i/"]
 
-USER 1001
 
 WORKDIR $HOME
 
