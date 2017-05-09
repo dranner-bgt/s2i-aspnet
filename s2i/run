@@ -5,4 +5,17 @@
 #	https://github.com/openshift/source-to-image/blob/master/docs/builder_image.md
 #
 
-exec dotnet run -p ${HOME}/project.json
+  DOTNET_CONFIGURATION="${DOTNET_CONFIGURATION:-Release}"
+  DOTNET_STARTUP_PROJECT="${DOTNET_STARTUP_PROJECT:-.}"
+  DOTNET_FRAMEWORK="netcoreapp1.1"
+  if [ -n "$DOTNET_ASSEMBLY_NAME" ]; then
+    APP_DLL_NAME="${DOTNET_ASSEMBLY_NAME}.dll"
+  else
+    APP_DLL_NAME="$(basename "$(realpath "${DOTNET_STARTUP_PROJECT}")").dll"
+  fi
+  APP_DLL_PATH="bin/${DOTNET_CONFIGURATION}/${DOTNET_FRAMEWORK}/${APP_DLL_NAME}"
+  
+  cd "${DOTNET_STARTUP_PROJECT}"
+
+  echo "---> Running application ..."
+  exec dotnet "${APP_DLL_PATH}"
