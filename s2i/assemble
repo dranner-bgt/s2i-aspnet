@@ -18,7 +18,8 @@ if [[ "$1" == "-h" ]]; then
 	exec /usr/libexec/s2i/usage
 fi
 
-if [ -n "$DOTNET_SUB_PROJECT"]
+# Go to sub project
+if [ -n "$DOTNET_SUB_PROJECT"]; then
 	cd $DOTNET_SUB_PROJECT
 fi
 
